@@ -75,14 +75,17 @@ class FileSystem {
 	}
 
     OpenFile* Open(char *name) {
+		printf("Opened .h\n");
+		printf("%s\n", name);
 	  int fileDescriptor = OpenForReadWrite(name, FALSE);
 
 	  if (fileDescriptor == -1) return NULL;
-	  cur++;
 	  return new OpenFile(fileDescriptor);
       }
         OpenFile* Open(char *name, int type) 
 	{
+		printf("Opened .h 2\n");
+		printf("%s\n", name);
 	    int fileDescriptor = OpenForReadWrite(name, FALSE);
 
 	    if (fileDescriptor == -1) return NULL;
@@ -111,6 +114,7 @@ class FileSystem {
 					// Create a file (UNIX creat)
 
     OpenFile* Open(char *name); 	// Open a file (UNIX open)
+	 OpenFile* Open(char *name, int type) ;
 
     bool Remove(char *name);  		// Delete a file (UNIX unlink)
 

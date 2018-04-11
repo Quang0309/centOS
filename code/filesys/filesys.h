@@ -75,14 +75,17 @@ class FileSystem {
 	}
 
     OpenFile* Open(char *name) {
+		//printf("Opened .h\n");
+		//printf("%s\n", name);
 	  int fileDescriptor = OpenForReadWrite(name, FALSE);
 
 	  if (fileDescriptor == -1) return NULL;
-	  cur++;
 	  return new OpenFile(fileDescriptor);
       }
         OpenFile* Open(char *name, int type) 
 	{
+		//printf("Opened .h 2\n");
+		//printf("%s\n", name);
 	    int fileDescriptor = OpenForReadWrite(name, FALSE);
 
 	    if (fileDescriptor == -1) return NULL;

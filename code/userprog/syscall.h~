@@ -23,10 +23,10 @@
 #define SC_Exec		2
 #define SC_Join		3
 #define SC_Create	4
-#define SC_Open		5
+//#define SC_Open		5
 #define SC_Read		6
 #define SC_Write	7
-#define SC_Close	8
+//#define SC_Close	8
 #define SC_Fork		9
 #define SC_Yield	10
 #define SC_Compare	11
@@ -38,6 +38,7 @@
 #define SC_Printstring	17
 #define SC_CreateFile	18
 #define SC_OpenFile	19
+#define SC_CloseFile	20
 #ifndef IN_ASM
 
 /* The system call interface.  These are the operations the Nachos
@@ -114,7 +115,7 @@ void Write(char *buffer, int size, OpenFileId id);
 int Read(char *buffer, int size, OpenFileId id);
 
 /* Close the file, we're done reading and writing to it. */
-void Close(OpenFileId id);
+//void Close(OpenFileId id);
 
 
 
@@ -141,6 +142,7 @@ void Readstring(char buffer[], int length);
 void Printstring(char buffer[]);
 int CreateFile(char* fileName);
 OpenFileId Open(char* name,int type);
+int Close(OpenFileId id);
 #endif /* IN_ASM */
 
 #endif /* SYSCALL_H */
