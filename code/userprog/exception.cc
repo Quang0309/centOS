@@ -196,6 +196,9 @@ void ExceptionHandler(ExceptionType which)
 					}
 				case SC_OpenFile:
 				{
+					//if(fileSystem->data[2]!=NULL)
+					//{ printf("%d",-1);}
+					//else printf("%d",10);
 					int addr = machine->ReadRegister(4);
 					char *buf = new char[1000];
 					int type = machine->ReadRegister(5);
@@ -218,7 +221,9 @@ void ExceptionHandler(ExceptionType which)
 						delete []buf;
 						break;
 					}
+					//printf("%d",fileSystem->cur);
 					OpenFile* temp = fileSystem->Open(buf,type);
+					//printf("%d",fileSystem->cur);
 					if (temp != NULL)
 					{
 						fileSystem->data[fileSystem->cur-1] = temp;
@@ -230,6 +235,19 @@ void ExceptionHandler(ExceptionType which)
 					delete []buf;
 					break;
 				}
+				case SC_CloseFile:
+					{
+						int index = machine->ReadRegister(4);
+					if (fileSystem->data[index] == NULL) 
+					{
+						machine->WriteRegister(2,-1);
+						break;
+					}
+					delete fileSystem->data[index];
+					fileSystem->data[index] = NULL;
+					machine->WriteRegister(2,0);
+					break;
+					}
 		}
 		 machine->registers[PrevPCReg] = machine->registers[PCReg];	// for debugging, in case we
 						// are jumping into lala-land
