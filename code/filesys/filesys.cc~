@@ -227,6 +227,7 @@ FileSystem::Create(char *name, int initialSize)
 OpenFile *
 FileSystem::Open(char *name)
 { 
+	printf("Opened");
     Directory *directory = new Directory(NumDirEntries);
     OpenFile *openFile = NULL;
     int sector;
@@ -234,12 +235,37 @@ FileSystem::Open(char *name)
     DEBUG('f', "Opening file %s\n", name);
     directory->FetchFrom(directoryFile);
     sector = directory->Find(name); 
-    if (sector >= 0) 		
+    if (sector >= 0) 
+	{		
 	openFile = new OpenFile(sector);	// name was found in directory 
+	cur++;
+	data[cur-1] = openFile;
+	}
     delete directory;
     return openFile;				// return NULL if not found
 }
 
+/*
+OpenFile *
+FileSystem::Open(char *name, int type)
+{ 
+	printf("Opened 2 args");
+    Directory *directory = new Directory(NumDirEntries);
+    OpenFile *openFile = NULL;
+    int sector;
+
+    DEBUG('f', "Opening file %s\n", name);
+    directory->FetchFrom(directoryFile);
+    sector = directory->Find(name); 
+    if (sector >= 0) 
+	{		
+	openFile = new OpenFile(sector,type);	// name was found in directory 
+	cur++;
+	data[cur-1] = openFile;
+	}
+    delete directory;
+    return openFile;				// return NULL if not found
+}*/
 //----------------------------------------------------------------------
 // FileSystem::Remove
 // 	Delete a file from the file system.  This requires:

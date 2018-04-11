@@ -93,7 +93,7 @@ OpenFile::Write(char *into, int numBytes)
    seekPosition += result;
    return result;
 }
-
+ int OpenFile::getType() {return type;}
 //----------------------------------------------------------------------
 // OpenFile::ReadAt/WriteAt
 // 	Read/write a portion of a file, starting at "position".

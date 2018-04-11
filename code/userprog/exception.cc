@@ -196,9 +196,19 @@ void ExceptionHandler(ExceptionType which)
 					}
 				case SC_OpenFile:
 				{
+					//if(fileSystem->data[2]!=NULL)
+					//{ printf("%d",-1);}
+					//else printf("%d",10);
 					int addr = machine->ReadRegister(4);
 					char *buf = new char[1000];
 					int type = machine->ReadRegister(5);
+					if(type!=1&&type!=0)
+					{
+						printf("Wrong type");
+						machine->WriteRegister(2,-1);
+						delete []buf;
+						break;
+					}
 					if(fileSystem->cur > 10)
 					{
 						machine->WriteRegister(2,-1);
@@ -218,7 +228,9 @@ void ExceptionHandler(ExceptionType which)
 						delete []buf;
 						break;
 					}
+					//printf("%d",fileSystem->cur);
 					OpenFile* temp = fileSystem->Open(buf,type);
+					//printf("%d",fileSystem->cur);
 					if (temp != NULL)
 					{
 						fileSystem->data[fileSystem->cur-1] = temp;
@@ -230,6 +242,51 @@ void ExceptionHandler(ExceptionType which)
 					delete []buf;
 					break;
 				}
+				case SC_CloseFile:
+					{
+						int index = machine->ReadRegister(4);
+					if (fileSystem->data[index] == NULL) 
+					{
+						machine->WriteRegister(2,-1);
+						break;
+					}
+					delete fileSystem->data[index];
+					fileSystem->data[index] = NULL;
+					machine->WriteRegister(2,0);
+					break;
+					}
+				case SC_WriteFile:
+					{
+						int addr = machine->ReadRegister(4);
+						int num = machine->ReadRegister(5);
+						int index = machine->ReadRegister(6);
+						if (index < 0 || index > 9)    // can open maximun 10 files
+						{
+							machine->WriteRegister(2, -1);
+						
+							break;
+						}
+						if (fileSystem->data[index] == NULL)    //the file is not opened
+						{
+							machine->WriteRegister(2, -1);
+							break;
+						}
+						if(fileSystem->data[index]->getType()  != 0)
+						{	
+							printf("Can not write to read-only file");
+							machine->WriteRegister(2, -1);
+							break;
+						}
+						if(fileSystem->data[index]->getType()  == 0)
+						{
+							char* buf = new char[num];
+							buf = machine->User2System(addr, num);
+							int a = fileSystem->data[index]->Write(buf, num);
+							machine->WriteRegister(2, a);
+							delete[] buf;
+							break;					
+						}
+					}
 		}
 		 machine->registers[PrevPCReg] = machine->registers[PCReg];	// for debugging, in case we
 						// are jumping into lala-land

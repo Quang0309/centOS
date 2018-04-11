@@ -53,7 +53,7 @@ class OpenFile {
 		}
 
     int Length() { Lseek(file, 0, 2); return Tell(file); }
-    
+    int getType() {return type;}
   private:
     int file;
     int currentOffset;
@@ -82,7 +82,7 @@ class OpenFile {
     					// Read/write bytes from the file,
 					// bypassing the implicit position.
     int WriteAt(char *from, int numBytes, int position);
-
+	int getType();
     int Length(); 			// Return the number of bytes in the
 					// file (this interface is simpler 
 					// than the UNIX idiom -- lseek to 

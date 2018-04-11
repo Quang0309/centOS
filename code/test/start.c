@@ -106,13 +106,13 @@ Write:
 	j	$31
 	.end Write
 
-	.globl Close
-	.ent	Close
-Close:
-	addiu $2,$0,SC_Close
-	syscall
-	j	$31
-	.end Close
+//	.globl Close
+//	.ent	Close
+//Close:
+//	addiu $2,$0,SC_Close
+//	syscall
+//	j	$31
+//	.end Close
 
 	.globl Fork
 	.ent	Fork
@@ -204,6 +204,22 @@ Open:
 	syscall
 	j	$31
 	.end Open
+
+	.globl CloseFile
+	.ent	CloseFile
+CloseFile:
+	addiu $2,$0,SC_CloseFile
+	syscall
+	j	$31
+	.end CloseFile
+
+	.globl WriteFile
+	.ent	WriteFile
+WriteFile:
+	addiu $2,$0,SC_WriteFile
+	syscall
+	j	$31
+	.end WriteFile
 /* dummy function to keep gcc happy */
         .globl  __main
         .ent    __main

@@ -34,12 +34,12 @@ OpenFile::OpenFile(int sector)
     seekPosition = 0;
 	type = 0;
 }
-OpenFile::OpenFile(int sector,int type)
+OpenFile::OpenFile(int sector,int _type)
 { 
     hdr = new FileHeader;
     hdr->FetchFrom(sector);
     seekPosition = 0;
-	this.type = type;
+	type = _type;
 }
 //----------------------------------------------------------------------
 // OpenFile::~OpenFile

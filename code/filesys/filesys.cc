@@ -227,6 +227,7 @@ FileSystem::Create(char *name, int initialSize)
 OpenFile *
 FileSystem::Open(char *name)
 { 
+	printf("Opened");
     Directory *directory = new Directory(NumDirEntries);
     OpenFile *openFile = NULL;
     int sector;
@@ -244,9 +245,11 @@ FileSystem::Open(char *name)
     return openFile;				// return NULL if not found
 }
 
+
 OpenFile *
 FileSystem::Open(char *name, int type)
 { 
+	printf("Opened 2 args");
     Directory *directory = new Directory(NumDirEntries);
     OpenFile *openFile = NULL;
     int sector;
