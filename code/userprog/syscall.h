@@ -38,6 +38,7 @@
 #define SC_Printstring	17
 #define SC_CreateFile	18
 #define SC_OpenFile	19
+#define SC_ReadFile	20
 #ifndef IN_ASM
 
 /* The system call interface.  These are the operations the Nachos
@@ -141,6 +142,7 @@ void Readstring(char buffer[], int length);
 void Printstring(char buffer[]);
 int CreateFile(char* fileName);
 OpenFileId Open(char* name,int type);
+int Read(char *buffer, int charcount, OpenFileId id);
 #endif /* IN_ASM */
 
 #endif /* SYSCALL_H */

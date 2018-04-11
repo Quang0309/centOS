@@ -230,6 +230,47 @@ void ExceptionHandler(ExceptionType which)
 					delete []buf;
 					break;
 				}
+				case SC_ReadFile:
+				{
+					int bufAddr = machine->ReadRegister(4);
+					int charNum = machine -> ReadRegister(5);
+					OpenFileId fIndex = machine->ReadRegister(6);
+
+					if ( (fIndex < 0 || fIndex >10) || (fileSystem->data[fIndex] == NULL)){ //invalid  file index or file not opened
+						machine->WriteRegister(2, -1);
+						break;
+					}
+
+					char* buf = new char[charNum];
+
+					buf = machine->User2System(bufAddr, charNum);
+
+					if (fileSystem->data[fIndex] == 2){ //stdout
+						int numRd = synchConsole->Read(bufAddr,charNum); //number of characters read from Console
+						machine->System2User(bufAddr,numRd,buf);//Translate from Kernel space to User space
+						machine->WriteRegister(2, numRd);
+
+						delete[] buf;
+
+						break;
+					}
+
+					int oldPos = fileSystem->data[fIndex]->GetCurrentPos();
+					int newPos;
+
+					if (fileSystem->data[fIndex]->Read(buf, charNum) > 0){//if we actually read something
+						newPos = fileSystem->data[fIndex]->GetCurrentPos();//get cursor new position
+						machine->System2User(bufAddr,newPos - oldPos + 1,buf);//Kernel to Userspace with the number of bytes read
+						if (fileSystem->data[fIndex]->GetCurrentPos() == 0) machine->WriteRegister(2, -2); //if eof returns -2
+						else machine->WriteRegister(2, newPos - oldPos +1);//write to return register with the number of bytes read
+					}
+					else{
+						machine->WriteRegister(2, -1); //return -1 if nothing was read
+					}
+
+					delete[] buf; //deallocation
+					break;
+				}
 		}
 		 machine->registers[PrevPCReg] = machine->registers[PCReg];	// for debugging, in case we
 						// are jumping into lala-land
